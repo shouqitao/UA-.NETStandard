@@ -33,45 +33,37 @@ using Opc.Ua.Client.Controls;
 using Opc.Ua.Sample.Controls;
 using Opc.Ua.Configuration;
 
-namespace Opc.Ua.Sample
-{
-    public partial class SampleClientForm : ClientForm
-    {
-        public SampleClientForm()
-        {
+namespace Opc.Ua.Sample {
+    public partial class SampleClientForm : ClientForm {
+        public SampleClientForm() {
             InitializeComponent();
         }
 
         public SampleClientForm(
-            ApplicationInstance application, 
-            ClientForm masterForm, 
+            ApplicationInstance application,
+            ClientForm masterForm,
             ApplicationConfiguration configuration)
-        :
-            base(configuration.CreateMessageContext(), application, masterForm, configuration)
-        {
+            :
+            base(configuration.CreateMessageContext(), application, masterForm, configuration) {
             InitializeComponent();
 
-            if (!configuration.SecurityConfiguration.AutoAcceptUntrustedCertificates)
-            {
-                configuration.CertificateValidator.CertificateValidation += new CertificateValidationEventHandler(CertificateValidator_CertificateValidation);
+            if (!configuration.SecurityConfiguration.AutoAcceptUntrustedCertificates) {
+                configuration.CertificateValidator.CertificateValidation +=
+                    new CertificateValidationEventHandler(CertificateValidator_CertificateValidation);
             }
         }
 
-        void CertificateValidator_CertificateValidation(CertificateValidator validator, CertificateValidationEventArgs e)
-        {
-            if (InvokeRequired)
-            {
+        void CertificateValidator_CertificateValidation(CertificateValidator validator,
+            CertificateValidationEventArgs e) {
+            if (InvokeRequired) {
                 Invoke(new CertificateValidationEventHandler(CertificateValidator_CertificateValidation), validator, e);
                 return;
             }
 
-            try
-            {
+            try {
                 GuiUtils.HandleCertificateValidationError(this, validator, e);
-            }
-            catch (Exception exception)
-            {
-				GuiUtils.HandleException(this.Text, MethodBase.GetCurrentMethod(), exception);
+            } catch (Exception exception) {
+                GuiUtils.HandleException(this.Text, MethodBase.GetCurrentMethod(), exception);
             }
         }
     }
